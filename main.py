@@ -2,37 +2,40 @@ import os.path
 
 def main():
     choice = ''
+
+    # Q to quit
     while choice != 'Q' and choice != 'q':
+        # Interface
         new_Step = "-"*24
         print(new_Step)
         choice = input(" - Connect (C)\n - Create a user (U)\n - Quit (Q)\n"+new_Step+"\n")
-        if choice == 'C' or choice == 'c':
+        # If a user exist, and C is pressed, the connection menu shows up
+        if os.path.exists("user.txt") and (choice == 'C' or choice == 'c'):
            connection_menu()
+           # U, to creat a new user
         if choice == 'U' or choice == 'u':
            new_user()
 
 def connection_menu():
     user_file = open("user.txt","r")
     data = user_file.readlines()
-    print("Type the user name you want to access, then it's password")
+    print("Type an user name, then the password")
     userPass = {}
-    # show all user, and add them to L
+    # all user and their password are added to userPass
     for user in data:
         index = user.find(' ')
         user_name = user[:index]
-        #if user[index+1:len(user)-1]:
         userPass[user[:index]] = user[index+1:len(user)-1:]
 
         print(user_name)
-        #print(user)
-    #print(userPass)
     entry = input() 
     print()
 
+
     if entry not in userPass:
-        print(entry+ " Is not a user name")
+        print(entry+ " could not be found")
     else:
-        password_entry = input("Enter "+entry+" paswword: ")
+        password_entry = input("Enter "+entry+" password: ")
         if password_entry != userPass[entry]:
             print("Wrong password")
         else:
@@ -67,18 +70,21 @@ def add_profil_menu(username, numberProfiles):
     dataL = []
     while True:
         data = input("Enter a name ")
+        # name as to be aplha
         if data.isalpha():
             dataL.append(data)
             break
     while True:
         data = input("Enter a Company name (optional)")
+        # company name as to be aplha
         if data.isalpha() or not data:
             dataL.append(data)
             break
-    data = input("Enter a email adress (optional) ")
+    data = input("Enter an email adress (optional) ")
     dataL.append(data)
     while True:
         data = input("Enter a telephone number (optional) ")
+        # Phone number as to be numeric
         if data.isnumeric() or not data:
             dataL.append(data)
             break
@@ -118,6 +124,7 @@ def main_menu(username):
     choice = ''
     # L for log out
     while choice != 'L' and choice != 'l':
+        # If this username doesn't got a file, a new is created, with profil number at 0
         if not os.path.exists(username+"save.txt"):
             new_file = open(username+"save.txt", "a+")
             new_file.write("\nProfil Number :0\n")
@@ -148,4 +155,3 @@ def main_menu(username):
     return 0
     
 main()
-#main_menu()
